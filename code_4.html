@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">    
+    <title>IFE ECMAScript</title>
+</head>
+<body>
+        <select id="year-select">
+        </select>
+            
+        <select id="month-select">
+        </select>
+            
+        <select id="day-select">
+        </select>
+            
+        <select id="hour-select">
+        </select>
+            
+        <select id="minite-select">
+        </select>
+            
+        <select id="second-select">
+        </select>
+            
+        <p id="result-wrapper">现在距离 2001年1月1日星期X HH:MM:SS 还有 X 天 X 小时 X 分 X 秒</p>
+ <script>
+ var yearSel=document.getElementById("year-select");
+     monthSel=document.getElementById("month-select");
+     daySel=document.getElementById("day-select");
+     hourSel=document.getElementById("hour-select");
+     minSel=document.getElementById("minite-select");
+     secSel=document.getElementById("second-select");
+     p=document.getElementById("result-wrapper");
+     sel=document.getElementsByTagName("select");
+    function doyear(){  
+        var thisYear = new Date().getFullYear();  
+        for(var i=2000;i<=thisYear+20;i++){  
+            var option = document.createElement("option");  
+            option.value = i;  
+            option.innerText = i;  
+            yearSel.appendChild(option);  
+        }  
+    }
+    function domoth(){  
+        for(var i=1;i<=12;i++){  
+            var option = document.createElement("option");  
+            option.value = i;  
+            option.innerText = i;  
+            monthSel.appendChild(option);  
+        }  
+    }  
+    function doday(){   
+        var selectYear = parseInt(yearSel.options[yearSel.selectedIndex].value);  
+        var selectMonth = parseInt(monthSel.options[monthSel.selectedIndex].value);   
+        var date = new Date(selectYear,selectMonth,0);          
+        for(var i=1;i<=date.getDate();i++){  
+            var option = document.createElement("option");  
+            option.value = i;  
+            option.innerText = i;  
+            daySel.appendChild(option);  
+        }  
+    } 
+    function doHMS(sel){
+        for(var i=0;i<24;i++){
+            var option = document.createElement("option");
+            option.value = i;  
+            option.innerText = i;  
+            sel.appendChild(option);    
+        }
+    }
+    window.onload=function(){
+        doyear();
+        domoth();
+        doday();
+        doHMS(hourSel);
+        doHMS(minSel);
+        doHMS(secSel);
+    }
+    for(var i=0;i<sel.length;i++){
+        sel[i].addEventListener('change',function(){
+        doday();
+        var t=setInterval("printTime()",1000);
+        printTime();
+      })
+    }
+    yearSel.addEventListener('change',function(){
+        doday();
+        var t=setInterval("printTime()",1000);
+    })
+    monthSel.addEventListener('change',function(){
+        doday();
+    })
+    function timeDiff(){
+        var selTime=checkTime(+monthSel.options[monthSel.selectedIndex].value)+'/'+
+                    checkTime(daySel.options[daySel.selectedIndex].value)+'/'+
+                    yearSel.options[yearSel.selectedIndex].value+' '+
+                    checkTime(hourSel.options[hourSel.selectedIndex].value) +':'+
+                    checkTime(minSel.options[minSel.selectedIndex].value) +':'+
+                    checkTime(secSel.options[secSel.selectedIndex].value);
+             t= new Date(selTime);
+             return t;
+    }
+    function printTime(){
+        var date1=timeDiff();
+            date2=new Date();
+            date3=date2.getTime()-date1.getTime();          
+            selTime=selTimeText();
+            days=Math.floor(Math.abs(date3)/(24*3600*1000));  
+            leave1=Math.abs(date3)%(24*3600*1000);
+            hours=Math.floor(leave1/(3600*1000));  
+            leave2=leave1%(3600*1000);
+            minutes=Math.floor(leave2/(60*1000));  
+            leave3=leave2%(60*1000); 
+            seconds=Math.round(leave3/1000);
+        if(date3>0){
+            p.innerHTML="现在距离 "+selTime+"已经过去 "+days+"天 "+hours+"小时 "+minutes+" 分钟"+seconds+" 秒";
+        }else{
+            p.innerHTML="现在距离 "+selTime+"还有 "+days+"天 "+hours+"小时 "+minutes+" 分钟"+seconds+" 秒";
+        }
+    }
+    function selTimeText(){
+        var time=timeDiff();
+            year=time.getFullYear();
+            month=time.getMonth()+1;           
+            day=time.getDate();            
+            weekDay=time.getDay();
+            h=time.getHours();
+            m=time.getMinutes();
+            s=time.getSeconds();
+            month=checkTime(month);
+            day= checkTime(day);
+            weekDay=checkWeek(weekDay);
+            h=checkTime(h);
+            m=checkTime(m);
+            s=checkTime(s);
+           return pra=year+" 年 "+month+" 月 "+day+" 日 "+weekDay+" "+h+":"+m+":"+s;
+    }
+    function checkWeek(i){
+        switch(i){
+            case 0:
+            i ="星期日";
+            break;
+            case 1:
+            i ="星期一";
+            break;
+            case 2:
+            i ="星期二";
+            break;
+            case 3:
+            i ="星期三";
+            break;
+            case 4:
+            i ="星期四";
+            break;
+            case 5:
+            i ="星期五";
+            break;
+            case 6:
+            i ="星期六";
+            break;
+        }
+        return i;
+    }
+    function checkTime(i)
+         {if (i<10) {
+             i="0" + i
+             }
+             return i;
+         }
+ </script>
+</body>
+</html>

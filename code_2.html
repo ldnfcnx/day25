@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">    
+    <title>IFE ECMAScript</title>
+</head>
+<body>            
+    <p></p>
+    <script>
+    var p =document.querySelector("p");
+        t =setInterval(function(){
+            var time=startTime();
+            showTime(time);
+         },500);
+
+    function startTime(){
+        var now=nowTime();
+            year=now.getFullYear();
+            month=now.getMonth()+1;           
+            day=now.getDate();            
+            weekDay=now.getDay();
+            h=now.getHours();
+            m=now.getMinutes();
+            s=now.getSeconds();
+            timeText=[year,month,day,weekDay,h,m,s]
+            return timeText;
+    }
+    function showTime(arr){
+            arr[1]=checkTime(arr[1]);
+            arr[2]=checkTime(arr[2]);
+            arr[3]=checkWeek(arr[3]);
+            var hms=checkHMS(arr[4],arr[5],arr[6]);
+            p.innerHTML=arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+" "+hms;
+    }
+    function checkHMS(x,y,z){
+        y=checkTime(y);
+        z=checkTime(z);
+        if(x>12){
+            x-=12;
+            checkTime(x);
+            return hms=x+":"+y+":"+z+" PM";
+        }else{
+            checkTime(x);
+            return hms=x+":"+y+":"+z+" AM";
+        }
+    }
+    function checkWeek(i){
+        switch(i){
+            case 0:
+            i ="Sunday";
+            break;
+            case 1:
+            i ="Monday";
+            break;
+            case 2:
+            i ="Tuesday";
+            break;
+            case 3:
+            i ="Wednesday";
+            break;
+            case 4:
+            i ="Thursday";
+            break;
+            case 5:
+            i ="Friday";
+            break;
+            case 6:
+            i ="Saturday";
+            break;
+        }
+        return i;
+    }
+    function checkTime(i)
+         {if (i<10) {
+             i="0" + i
+             }
+             return i;
+         }
+    function nowTime(){
+        return new Date();
+    }
+    </script>
+</body>
+</html>
